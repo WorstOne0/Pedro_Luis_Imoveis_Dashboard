@@ -16,6 +16,7 @@ import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription }
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle } from "./ui/chart";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 // Export Components
 export {
@@ -45,4 +46,11 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 };

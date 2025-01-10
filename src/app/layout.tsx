@@ -2,10 +2,8 @@
 
 // Next
 import { Nunito } from "next/font/google";
-// Components
-import { NavBar } from "@/components";
 // Services
-import { MapProvider, ThemeProvider } from "@/services";
+import { ThemeProvider } from "@/services";
 // Styles
 import "@/styles/global.css";
 
@@ -19,12 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-        <body className={`w-full flex flex-col ${nunito.className} antialiased`}>
-          <NavBar />
-          <div className="min-h-0 grow">
-            <MapProvider>{children}</MapProvider>
-          </div>
-        </body>
+        <body className={`h-full w-full flex ${nunito.className} antialiased`}>{children}</body>
       </ThemeProvider>
     </html>
   );
