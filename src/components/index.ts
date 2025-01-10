@@ -18,6 +18,7 @@ import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle } from "./ui/chart";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Export Components
 export {
@@ -55,4 +56,5 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
+  Checkbox,
 };
