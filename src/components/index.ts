@@ -5,6 +5,7 @@ import Modal from "./modal";
 //
 import RealEstateCard from "./real_estate_card";
 import DistrictPolygons from "./district_polygons";
+import InputWithLabel from "./input_with_label";
 // SVGS
 import ApartamentSVG from "./svgs/apartament";
 import HouseSVG from "./svgs/house";
@@ -25,6 +26,7 @@ export {
   Modal,
   RealEstateCard,
   DistrictPolygons,
+  InputWithLabel,
   // SVGS
   ApartamentSVG,
   HouseSVG,

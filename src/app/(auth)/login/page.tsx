@@ -1,11 +1,11 @@
 "use client";
 
 // Next
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 // Components
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@/components";
+import { Form, InputWithLabel } from "@/components";
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -42,35 +42,12 @@ export default function Login() {
           <span className="italic text-gray-500 text-[1.6rem]">Enter your username and password to continue</span>
         </div>
         {/* Login */}
-        <div>
+        <div className="w-[60%] mt-[3rem]">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <InputWithLabel name="email" label="Email" />
+              <div className="h-[2rem]"></div>
+              <InputWithLabel name="password" label="Password" />
             </form>
           </Form>
         </div>
