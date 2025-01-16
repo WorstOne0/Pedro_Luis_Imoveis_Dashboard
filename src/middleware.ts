@@ -11,11 +11,15 @@ export default async function middleware(req: NextRequest) {
   const isRoot = path === root;
   const isPublicRoute = publicRoutes.includes(path);
 
+  const cookie2 = cookies().get("accessToken")?.value;
+  console.log("asdaaaaaaaaaaa", cookie2);
+  console.log("path", path);
+
   return NextResponse.next();
 
   if (isPublicRoute) return NextResponse.next();
 
-  const cookie = cookies().get("session")?.value;
+  const cookie = cookies().get("accessToken")?.value;
   const session = verifyToken(cookie);
 
   // Redirect to /login if the user is not authenticated

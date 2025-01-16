@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-  baseURL: "https://api.example.com",
+const apiService = axios.create({
+  baseURL: "http://localhost:4000",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
   },
 });
 
-export default axiosInstance;
+export default apiService;

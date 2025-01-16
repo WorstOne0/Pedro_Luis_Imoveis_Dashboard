@@ -1,5 +1,5 @@
 // Global
-import axios from "./axios";
+import axios from "./api_service";
 import { MapProvider } from "./google_maps";
 import { ThemeProvider } from "./theme_provider";
 

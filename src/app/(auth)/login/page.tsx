@@ -1,24 +1,29 @@
 "use client";
 
 // Next
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Cookies from "js-cookie";
+// Services
+import apiService from "@/services/api_service";
 // Components
 import { Checkbox, Form, InputWithLabel } from "@/components";
-//
+// Icons
 import { FaGithub } from "react-icons/fa";
 
 const FormSchema = z.object({
-  email: z.string().min(2, {
-    message: "",
-  }),
-  password: z.string().min(2, {
-    message: "",
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters long",
   }),
 });
 
 export default function Login() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -27,7 +32,21 @@ export default function Login() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {};
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    console.log(data);
+
+    const response = await apiService.post("/login", { email: data.email, password: data.password });
+    console.log(response);
+
+    if (response.status !== 200) {
+      console.log("Erro");
+      return;
+    }
+
+    const accessToken = response.data.accessToken;
+    Cookies.set("accessToken", accessToken, { expires: 7 });
+    router.push("/dashboard");
+  };
 
   return (
     <div className="h-full w-full flex">
@@ -39,9 +58,14 @@ export default function Login() {
       <div className="h-full w-1/2 flex flex-col py-[1.5rem]">
         {/* Header */}
         <div className="h-[2rem] w-full flex justify-end px-[2rem]">
-          <div className="h-[2rem] w-[2rem] flex justify-center items-center cursor-pointer" onClick={() => {}}>
+          <Link
+            className="h-[2rem] w-[2rem] flex justify-center items-center cursor-pointer"
+            href="https://github.com/WorstOne0"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <FaGithub />
-          </div>
+          </Link>
         </div>
 
         {/* Body */}
@@ -58,21 +82,25 @@ export default function Login() {
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <InputWithLabel name="email" label="Email" />
                 <div className="h-[2rem]"></div>
-                <InputWithLabel name="password" label="Password" />
-              </form>
-              <div className="w-full flex justify-between mt-[1rem]">
-                <div className="flex items-center cursor-pointer">
-                  <Checkbox className="h-[1.3rem] w-[1.3rem] rounded-[0.3rem]" id="remember" />
-                  <label className="ml-[0.5rem] text-gray-500 text-[1.5rem] select-none" htmlFor="remember">
-                    Lembrar de mim
-                  </label>
-                </div>
-                <div className="text-primary font-bold text-[1.5rem] cursor-pointer">Esqueci minha senha</div>
-              </div>
+                <InputWithLabel name="password" label="Password" type="password" />
 
-              <div className="w-full flex justify-center items-center bg-primary rounded-[0.8rem] py-[1.2rem] mt-[3.5rem] cursor-pointer ">
-                <span className="text-[1.8rem] text-white font-bold select-none">Entrar</span>
-              </div>
+                <div className="w-full flex justify-between mt-[1rem]">
+                  <div className="flex items-center cursor-pointer">
+                    <Checkbox className="h-[1.3rem] w-[1.3rem] rounded-[0.3rem]" id="remember" />
+                    <label className="ml-[0.5rem] text-gray-500 text-[1.5rem] select-none" htmlFor="remember">
+                      Lembrar de mim
+                    </label>
+                  </div>
+                  <div className="text-primary font-bold text-[1.5rem] cursor-pointer">Esqueci minha senha</div>
+                </div>
+
+                <button
+                  className="w-full flex justify-center items-center bg-primary rounded-[0.8rem] py-[1.2rem] mt-[3.5rem] cursor-pointer"
+                  type="submit"
+                >
+                  <span className="text-[1.8rem] text-white font-bold select-none">Entrar</span>
+                </button>
+              </form>
             </Form>
           </div>
           {/* Singup */}
