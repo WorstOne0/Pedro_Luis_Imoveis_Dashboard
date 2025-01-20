@@ -1,6 +1,6 @@
 // Globals
-import useAuthStore from "./auth";
-import useRealEstateStore from "./real_estate";
+import useAuthStore from "./useAuthStore";
+import useRealEstateStore from "./useRealEstateStore";
 //
 import useDistrictStore from "@/components/district_polygons/store";
 

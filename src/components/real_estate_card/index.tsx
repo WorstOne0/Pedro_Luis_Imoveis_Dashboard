@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 // Store
-import { RealEstate } from "@/store/real_estate";
+import { RealEstate } from "@/store/useRealEstateStore";
 import { useRealEstateStore } from "@/store";
 // Components
 import { Card } from "@/components/ui/card";

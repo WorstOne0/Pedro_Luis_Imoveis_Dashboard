@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Cookies from "js-cookie";
 // Services
-import apiService from "@/services/api_service";
+import { apiService, withAuth, withHydration } from "@/services";
 // Components
 import { Checkbox, Form, InputWithLabel } from "@/components";
 // Icons
@@ -21,7 +21,8 @@ const FormSchema = z.object({
   }),
 });
 
-export default function Login() {
+export default withHydration(withAuth(Login, "auth"));
+function Login() {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -33,10 +34,7 @@ export default function Login() {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
-
     const response = await apiService.post("/login", { email: data.email, password: data.password });
-    console.log(response);
 
     if (response.status !== 200) {
       console.log("Erro");

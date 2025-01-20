@@ -45,6 +45,7 @@ type RealEstateStore = {
 const useRealEstateStore = create<RealEstateStore>((set) => ({
   realEstateList: [],
   realEstateSelected: null,
+  //
   setRealEstateList: (realEstateList: RealEstate[]) => set({ realEstateList: realEstateList }),
   setRealEstateSelected: (realEstate: RealEstate) => set({ realEstateSelected: realEstate }),
 }));
