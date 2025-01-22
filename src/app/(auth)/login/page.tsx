@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Cookies from "js-cookie";
 // Services
-import { apiService, withAuth, withHydration } from "@/services";
+import { withAuth, withHydration } from "@/services";
 // Components
 import { Checkbox, Form, InputWithLabel } from "@/components";
 // Icons
 import { FaGithub } from "react-icons/fa";
+import { useAuthStore } from "@/store";
 
 const FormSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -23,7 +23,9 @@ const FormSchema = z.object({
 
 export default withHydration(withAuth(Login, "auth"));
 function Login() {
+  //
   const router = useRouter();
+  const { login } = useAuthStore((state) => state);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -34,15 +36,12 @@ function Login() {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const response = await apiService.post("/login", { email: data.email, password: data.password });
+    const success = await login(data.email, data.password);
 
-    if (response.status !== 200) {
-      console.log("Erro");
+    if (!success) {
       return;
     }
 
-    const accessToken = response.data.accessToken;
-    Cookies.set("accessToken", accessToken, { expires: 7 });
     router.push("/dashboard");
   };
 

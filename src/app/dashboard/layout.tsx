@@ -12,7 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <body className={`h-full w-full flex`}>
-      {/* <NavBar /> */}
+      <NavBar />
       <div className="h-full min-w-0 grow">
         <MapProvider>{children}</MapProvider>
       </div>

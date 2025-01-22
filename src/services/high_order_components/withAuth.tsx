@@ -1,8 +1,8 @@
+"use client";
+
 // Next
 import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import { verifyToken } from "@/lib/jwt";
 // Store
 import { useAuthStore } from "@/store";
 
@@ -43,25 +43,16 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(Compon
   const ComponentWithAuth = (props: Omit<T, keyof WithAuthProps>) => {
     const router = useRouter();
 
-    const { isAuthenticated, user, setIsAuthenticated } = useAuthStore((state) => state);
+    const { user, isAuthenticated, isLoading, getSession } = useAuthStore((state) => state);
 
-    const checkAuth = useCallback(() => {
-      const accessToken = Cookies.get("accessToken");
-      const { isValid } = verifyToken(accessToken);
+    const checkAuth = useCallback(async () => {
+      if (routeRole !== "all") return;
 
-      console.log("isValid", isValid);
-
-      setIsAuthenticated(isValid);
-
-      if (!isValid) return;
-
-      // Get Session
-      // api.get("/get_session");
-    }, [setIsAuthenticated]);
+      await getSession();
+    }, [getSession]);
 
     // Handle Auth
     useEffect(() => {
-      console.log("Handle Auth");
       // Run checkAuth every page visit
       checkAuth();
 
@@ -72,25 +63,20 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(Compon
 
     // Handle Redirect
     useEffect(() => {
-      console.log("Handle Redirect");
-      console.log("isAuthenticated", isAuthenticated);
+      if (isLoading) return;
 
+      // Prevent authenticated user from accessing auth or other role pages
       if (isAuthenticated) {
-        // Prevent authenticated user from accessing auth or other role pages
-        if (routeRole === "auth") {
-          router.replace(HOME_ROUTE);
-        }
+        if (routeRole === "auth") router.replace(HOME_ROUTE);
       }
 
+      // Prevent unauthenticated user from accessing protected pages
       if (!isAuthenticated) {
-        console.log("routeRole", routeRole);
-        // Prevent unauthenticated user from accessing protected pages
-        if (routeRole !== "auth" && routeRole !== "optional") {
-          console.log("router.replace");
-          router.replace(`${LOGIN_ROUTE}`);
-        }
+        if (routeRole === "all") router.replace(`${LOGIN_ROUTE}`);
       }
-    }, [isAuthenticated, router, user]);
+    }, [user, isAuthenticated, isLoading, router]);
+
+    if (routeRole === "all" && isLoading) return <div>Loading</div>;
 
     return <Component {...(props as T)} user={user} />;
   };
