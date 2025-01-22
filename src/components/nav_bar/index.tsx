@@ -1,16 +1,17 @@
 "use client";
 
 // Next
+import { use, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useTheme } from "next-themes";
+import { motion, useAnimate } from "framer-motion";
 // Icons
-import { MdOutlineDarkMode } from "react-icons/md";
-import { FaRegBookmark } from "react-icons/fa";
 
 export default function NavBar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const [scope, animate] = useAnimate();
+
+  const [isNavOpen, setIsNavOpen] = useState(true);
 
   const buttons = [
     { value: "/", name: "Home" },
@@ -33,5 +34,24 @@ export default function NavBar() {
     );
   };
 
-  return <nav className="h-full min-w-[6.2rem] w-[6.2rem] bg-primary flex flex-col"></nav>;
+  const handleNavBarSize = () => {
+    if (isNavOpen) {
+      setIsNavOpen(false);
+      animate(scope.current, { width: "5rem" });
+
+      return;
+    }
+
+    if (!isNavOpen) {
+      setIsNavOpen(true);
+      animate(scope.current, { width: "18rem" });
+      return;
+    }
+  };
+
+  return (
+    <motion.nav ref={scope} initial={{ width: "18rem" }} className="h-full bg-primary flex flex-col" onClick={handleNavBarSize}>
+      <span className="text-white">{isNavOpen ? "Open" : "Abrir"}</span>
+    </motion.nav>
+  );
 }

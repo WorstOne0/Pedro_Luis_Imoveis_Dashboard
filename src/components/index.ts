@@ -1,5 +1,6 @@
 // Global
 import NavBar from "./nav_bar";
+import Breadcrumb from "./breadcrumb";
 import GoogleMaps from "./google_maps";
 import Modal from "./modal";
 //
@@ -23,6 +24,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 // Export Components
 export {
   NavBar,
+  Breadcrumb,
   GoogleMaps,
   Modal,
   RealEstateCard,
