@@ -37,8 +37,8 @@ export default function NavBar() {
             pathname === route.value ? "text-primary dark:text-white " : "text-gray-400 dark:text-gray-400"
           }`}
         >
-          {route.icon({ size: 22 })}
-          {isNavOpen && <span className="text-[1.6rem] font-bold">{route.name}</span>}
+          {route.icon({ size: 20 })}
+          {isNavOpen && <span className="text-[1.4rem] font-bold">{route.name}</span>}
         </Link>
       </Card>
     );
