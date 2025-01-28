@@ -1,7 +1,7 @@
 "use client";
 
 // Next
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, useAnimate } from "framer-motion";

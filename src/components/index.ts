@@ -3,7 +3,9 @@ import NavBar from "./nav_bar";
 import Breadcrumb from "./breadcrumb";
 import GoogleMaps from "./google_maps";
 import Modal from "./modal";
+import NavBarItems from "./nav_bar_items";
 //
+import SearchModal from "./search_modal";
 import RealEstateCard from "./real_estate_card";
 import DistrictPolygons from "./district_polygons";
 import InputWithLabel from "./input_with_label";
@@ -27,6 +29,9 @@ export {
   Breadcrumb,
   GoogleMaps,
   Modal,
+  NavBarItems,
+  //
+  SearchModal,
   RealEstateCard,
   DistrictPolygons,
   InputWithLabel,
