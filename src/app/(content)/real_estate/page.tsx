@@ -1,9 +1,107 @@
 "use client";
 
 // Services
+import { useState } from "react";
 import { withAuth, withHydration } from "@/services";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+// Components
+import { Card, Form, InputWithLabel, Pagination, RealEstateCard } from "@/components";
+import { useApiFetch } from "@/hooks";
+import { useRealEstateStore } from "@/store";
+//
+import { BsListUl, BsGrid1X2Fill } from "react-icons/bs";
+import { FaSearch, FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
+
+const FormSchema = z.object({
+  search: z.string().email("Invalid email address"),
+});
 
 export default withHydration(withAuth(RealEstate, "all"));
 function RealEstate() {
-  return <div className="h-full w-full">RealEstate</div>;
+  const { realEstateList, setRealEstateList, setRealEstateSelected } = useRealEstateStore((state) => state);
+  const { isLoading } = useApiFetch({ url: "http://localhost:4000/real_estate", method: "post" }, setRealEstateList);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  const buildLabel = ({ label, left = "1.5rem" }: { label: string; left?: string }) => {
+    return <label className={`absolute top-0 left-[${left}] translate-y-[-50%] text-[1.4rem] bg-background text-primary px-[1rem]`}>{label}</label>;
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="h-full w-full flex flex-col">
+      {/* Search Bar */}
+      <div className="min-h-[6.5rem] h-[6.5rem] w-full flex mt-[3rem] px-[1.5rem]">
+        <div className="h-full min-w-0 grow gap-[1rem] flex justify-center items-center mr-[1.5rem]">
+          <Form {...form}>
+            <form className="h-full min-w-0 grow" onSubmit={form.handleSubmit(() => {})}>
+              <InputWithLabel name="search" label="Busque por localização" className="h-[6.5rem] w-full" />
+            </form>
+          </Form>
+
+          <Card className="h-full w-[28rem] flex justify-center items-center relative">
+            <span>R$ 250.000 - R$ 1.000.000</span>
+            {buildLabel({ label: "Preço" })}
+          </Card>
+
+          <Card className="h-full w-[20rem] flex justify-center items-center relative">
+            <span>Apartamento</span>
+            {buildLabel({ label: "Tipo" })}
+          </Card>
+          <Card className="h-full w-[10rem] flex justify-center items-center relative">
+            <span>2-3</span>
+            {buildLabel({ label: "Quartos", left: "5px" })}
+          </Card>
+          <Card className="h-full w-[10rem] flex justify-center items-center relative">
+            <span>250m2</span>
+            {buildLabel({ label: "Area", left: "5px" })}
+          </Card>
+        </div>
+
+        <div className="h-full w-[18rem] rounded-[0.8rem] flex justify-center items-center bg-primary cursor-pointer">
+          <span className="text-white text-[2rem] font-bold select-none ">Procurar</span>
+        </div>
+      </div>
+
+      {/* List */}
+      <div className="flex justify-between px-[1.5rem] mt-[1.5rem]">
+        <div className="flex items-end">
+          <span className="text-[5rem] font-bold mr-[1rem]">340</span>
+          <span className="mb-[1.5rem] italic ">Imóveis encontrados</span>
+        </div>
+
+        <div className="h-full w-[25rem] flex justify-end items-center gap-[1.5rem] mr-[1.5rem]">
+          <Card className="h-[4.5rem] w-[4.5rem] flex justify-center items-center cursor-pointer">
+            <FaSortAmountDown />
+          </Card>
+          <Card className="h-[4.5rem] w-[4.5rem] flex justify-center items-center cursor-pointer">
+            <BsListUl />
+          </Card>
+          <Card className="h-[4.5rem] w-[4.5rem] flex justify-center items-center cursor-pointer">
+            <BsGrid1X2Fill size={16} />
+          </Card>
+        </div>
+      </div>
+      <div className="min-h-0 grow w-full grid grid-cols-[repeat(auto-fill,minmax(50rem,1fr))] gap-[1.5rem] px-[1.5rem] overflow-y-auto">
+        {[...realEstateList, ...realEstateList, ...realEstateList, ...realEstateList].map((item, index) => (
+          <RealEstateCard key={`real_estate_card_${index}`} realEstate={item} onClickCallback={() => {}} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={26} />
+    </div>
+  );
 }
