@@ -1,64 +1,31 @@
 "use client";
 
-// Next
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 // Store
 import { RealEstate } from "@/store/useRealEstateStore";
 import { useRealEstateStore } from "@/store";
 // Components
 import { Card } from "@/components/ui/card";
 // Icons
-import { FaBed, FaBath, FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { FaBed, FaBath } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { PiGarage } from "react-icons/pi";
 import { GiExpand } from "react-icons/gi";
-import { MdVerified } from "react-icons/md";
 
 export default function RealEstateCard({ realEstate, onClickCallback }: { realEstate: RealEstate; onClickCallback?: Function }) {
-  const router = useRouter();
-
-  const { realEstateSelected, setRealEstateSelected } = useRealEstateStore((state) => state);
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  const isSelected = realEstateSelected?._id === realEstate._id;
+  const { setRealEstateSelected } = useRealEstateStore((state) => state);
 
   const handleCardClick = () => {
     if (onClickCallback) onClickCallback();
-
-    if (realEstateSelected?._id === realEstate._id) {
-      return router.push(`/real_estate/${realEstate._id}`);
-    }
-
     setRealEstateSelected(realEstate);
-  };
-
-  const handleFavoriteClick = (event: any) => {
-    event.stopPropagation();
-    setIsFavorited(!isFavorited);
   };
 
   return (
     <Card className={`pb-3 flex flex-col select-none cursor-pointer rounded-[0.8rem] mt-4 relative`} onClick={handleCardClick}>
-      {/* Selected */}
-      {isSelected && (
-        <div
-          className="absolute top-0 left-0 h-[4rem] w-[4rem] bg-primary z-10"
-          style={{ clipPath: "polygon(0 0,100% 0,0 100%)", borderTopLeftRadius: "0.8rem" }}
-        >
-          <MdVerified size={18} color="white" className="ml-1 mt-1" />
-        </div>
-      )}
-
       {/* Imagem */}
       <div
         className={`h-[19rem] w-full rounded-[0.8rem] bg-cover bg-no-repeat bg-center relative`}
         style={{ backgroundImage: `url(${realEstate.thumbnail})` }}
-      >
-        <div className="absolute bottom-4 right-4" onClick={handleFavoriteClick}>
-          {isFavorited ? <FaBookmark color="red" /> : <FaRegBookmark color="red" />}
-        </div>
-      </div>
+      ></div>
       <div className="grow px-5 pt-3 pb-2 bg-white">
         {/* Title */}
         <div className="flex justify-between items-center">

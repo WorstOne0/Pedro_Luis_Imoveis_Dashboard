@@ -1,8 +1,8 @@
 "use client";
 
-// Services
+// Next
 import { useState } from "react";
-import { withAuth, withHydration } from "@/services";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,9 +10,11 @@ import { z } from "zod";
 import { Card, Form, InputWithLabel, Pagination, RealEstateCard } from "@/components";
 import { useApiFetch } from "@/hooks";
 import { useRealEstateStore } from "@/store";
+import { withAuth, withHydration } from "@/services";
 //
 import { BsListUl, BsGrid1X2Fill } from "react-icons/bs";
 import { FaSearch, FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
+import { IoAdd } from "react-icons/io5";
 
 const FormSchema = z.object({
   search: z.string().email("Invalid email address"),
@@ -20,6 +22,8 @@ const FormSchema = z.object({
 
 export default withHydration(withAuth(RealEstate, "all"));
 function RealEstate() {
+  const router = useRouter();
+
   const { realEstateList, setRealEstateList, setRealEstateSelected } = useRealEstateStore((state) => state);
   const { isLoading } = useApiFetch({ url: "http://localhost:4000/real_estate", method: "post" }, setRealEstateList);
 
@@ -41,7 +45,7 @@ function RealEstate() {
   }
 
   return (
-    <div className="h-full w-full flex flex-col">
+    <div className="h-full w-full flex flex-col relative">
       {/* Search Bar */}
       <div className="min-h-[6.5rem] h-[6.5rem] w-full flex mt-[3rem] px-[1.5rem]">
         <div className="h-full min-w-0 grow gap-[1rem] flex justify-center items-center mr-[1.5rem]">
@@ -78,7 +82,7 @@ function RealEstate() {
       {/* List */}
       <div className="flex justify-between px-[1.5rem] mt-[1.5rem]">
         <div className="flex items-end">
-          <span className="text-[5rem] font-bold mr-[1rem]">340</span>
+          <span className="text-[5rem] font-bold mr-[1rem]">{realEstateList.length}</span>
           <span className="mb-[1.5rem] italic ">Imóveis encontrados</span>
         </div>
 
@@ -96,8 +100,17 @@ function RealEstate() {
       </div>
       <div className="min-h-0 grow w-full grid grid-cols-[repeat(auto-fill,minmax(50rem,1fr))] gap-[1.5rem] px-[1.5rem] overflow-y-auto">
         {[...realEstateList, ...realEstateList, ...realEstateList, ...realEstateList].map((item, index) => (
-          <RealEstateCard key={`real_estate_card_${index}`} realEstate={item} onClickCallback={() => {}} />
+          <RealEstateCard key={`real_estate_card_${index}`} realEstate={item} onClickCallback={() => router.push(`/real_estate/edit/${item._id}`)} />
         ))}
+      </div>
+
+      {/* Add Button */}
+      <div
+        className="h-[7rem] w-[25rem] flex justify-center items-center gap-[1.5rem] rounded-[0.8rem] bg-primary shadow-xl cursor-pointer absolute bottom-[6.5rem] right-[2.5rem]"
+        onClick={() => router.push("/real_estate/add")}
+      >
+        <IoAdd color="white" size={30} />
+        <span className="text-white text-[2rem] font-bold select-none">Adicionar</span>
       </div>
 
       {/* Pagination */}

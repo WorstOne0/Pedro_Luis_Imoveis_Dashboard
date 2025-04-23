@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 //
 import { IoArrowBack } from "react-icons/io5";
 import { MdOutlineKeyboardArrowRight, MdSpaceDashboard, MdApartment, MdAnalytics, MdNotifications, MdOutlineSettings } from "react-icons/md";
+import { IoAdd } from "react-icons/io5";
+import { FaEdit } from "react-icons/fa";
+import { FaIdCard } from "react-icons/fa6";
 
 type RouteNames = {
   name: string;
@@ -18,24 +21,25 @@ const routesNames = [
   { name: "Análises", route: "analytics", icon: (props: any) => <MdAnalytics {...props} /> },
   { name: "Notificações", route: "notifications", icon: (props: any) => <MdNotifications {...props} /> },
   { name: "Configurações", route: "settings", icon: (props: any) => <MdOutlineSettings {...props} /> },
+  //
+  { name: "Adicionar", route: "add", icon: (props: any) => <IoAdd {...props} /> },
+  { name: "Editar", route: "edit", icon: (props: any) => <FaEdit {...props} /> },
 ] as RouteNames[];
 
 export default function Breadcrumb() {
   const pathName = usePathname();
 
   const routes = pathName.split("/").filter((route) => route !== "");
-  // const routes = ["/dashboard", "/real_estate", "/add"];
 
   const buildBreadcrumb = ({ route }: { route: string }) => {
     const isCurrentRoute = route === pathName;
-    const routeIcon = routesNames.find((r) => r.route === route)?.icon || ({} as any);
+    const routeIcon = routesNames.find((r) => r.route === route)?.icon || ((props: any) => (<FaIdCard {...props} />) as any);
 
     return (
       <div className="flex items-center select-none">
-        {/* <routeIcon size={16} color={isCurrentRoute ? "black" : "grey"} /> */}
         {routeIcon({ size: 16, color: isCurrentRoute ? "black" : "grey" })}
         <span className={`ml-[1rem] text-[1.4rem] ${isCurrentRoute ? "text-black" : "text-gray-500"}	`}>
-          {routesNames.find((r) => r.route === route)?.name || "N/A"}
+          {routesNames.find((r) => r.route === route)?.name || route}
         </span>
       </div>
     );
@@ -45,7 +49,7 @@ export default function Breadcrumb() {
     <div className="h-full w-full flex items-center">
       {routes.length > 1 && (
         <>
-          <div className="h-full w-[5rem] flex items-center justify-center">
+          <div className="h-full w-[5rem] flex items-center justify-center cursor-pointer" onClick={() => history.back()}>
             <IoArrowBack size={18} />
           </div>
           <div className="h-[40%] w-[0.1rem] bg-gray-300"></div>
