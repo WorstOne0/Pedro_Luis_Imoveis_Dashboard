@@ -8,6 +8,7 @@ import { MdOutlineKeyboardArrowRight, MdSpaceDashboard, MdApartment, MdAnalytics
 import { IoAdd } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { FaIdCard } from "react-icons/fa6";
+import { JSX } from "react";
 
 type RouteNames = {
   name: string;

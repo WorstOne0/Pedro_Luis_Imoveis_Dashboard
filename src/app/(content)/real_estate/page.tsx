@@ -31,13 +31,11 @@ function RealEstate() {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      search: "",
-    },
+    defaultValues: { search: "" },
   });
 
-  const buildLabel = ({ label, left = "1.5rem" }: { label: string; left?: string }) => {
-    return <label className={`absolute top-0 left-[${left}] translate-y-[-50%] text-[1.4rem] bg-background text-primary px-[1rem]`}>{label}</label>;
+  const buildLabel = ({ label }: { label: string; left?: string }) => {
+    return <label className={`absolute top-0 left-[0.8rem] translate-y-[-50%] text-[1.4rem] bg-background text-primary px-[1rem]`}>{label}</label>;
   };
 
   if (isLoading) {
@@ -47,36 +45,36 @@ function RealEstate() {
   return (
     <div className="h-full w-full flex flex-col relative">
       {/* Search Bar */}
-      <div className="min-h-[6.5rem] h-[6.5rem] w-full flex mt-[3rem] px-[1.5rem]">
-        <div className="h-full min-w-0 grow gap-[1rem] flex justify-center items-center mr-[1.5rem]">
-          <Form {...form}>
-            <form className="h-full min-w-0 grow" onSubmit={form.handleSubmit(() => {})}>
-              <InputWithLabel name="search" label="Busque por localização" className="h-[6.5rem] w-full" />
-            </form>
-          </Form>
+      <div className="min-h-[5.8rem] h-[5.8rem] w-full flex mt-[3rem] px-[1.5rem]">
+        <Form {...form}>
+          <form className="h-full w-full gap-[1rem] flex justify-center items-center mr-[1.5rem] " onSubmit={form.handleSubmit(() => {})}>
+            <div className="min-w-0 grow">
+              <InputWithLabel name="search" label="Pesquisar" className="h-[5.8rem] w-full" />
+            </div>
 
-          <Card className="h-full w-[28rem] flex justify-center items-center relative">
-            <span>R$ 250.000 - R$ 1.000.000</span>
-            {buildLabel({ label: "Preço" })}
-          </Card>
+            <Card className="h-full w-[28rem] flex justify-center items-center relative">
+              <span>R$ 250.000 - R$ 1.000.000</span>
+              {buildLabel({ label: "Preço" })}
+            </Card>
 
-          <Card className="h-full w-[20rem] flex justify-center items-center relative">
-            <span>Apartamento</span>
-            {buildLabel({ label: "Tipo" })}
-          </Card>
-          <Card className="h-full w-[10rem] flex justify-center items-center relative">
-            <span>2-3</span>
-            {buildLabel({ label: "Quartos", left: "5px" })}
-          </Card>
-          <Card className="h-full w-[10rem] flex justify-center items-center relative">
-            <span>250m2</span>
-            {buildLabel({ label: "Area", left: "5px" })}
-          </Card>
-        </div>
+            <Card className="h-full w-[20rem] flex justify-center items-center relative">
+              <span>Apartamento</span>
+              {buildLabel({ label: "Tipo" })}
+            </Card>
+            <Card className="h-full w-[12rem] flex justify-center items-center relative">
+              <span>2-3</span>
+              {buildLabel({ label: "Quartos" })}
+            </Card>
+            <Card className="h-full w-[12rem] flex justify-center items-center relative">
+              <span>250m2</span>
+              {buildLabel({ label: "Area" })}
+            </Card>
 
-        <div className="h-full w-[18rem] rounded-[0.8rem] flex justify-center items-center bg-primary cursor-pointer">
-          <span className="text-white text-[2rem] font-bold select-none ">Procurar</span>
-        </div>
+            <Card className="h-full w-[18rem] rounded-[0.8rem] flex justify-center items-center bg-primary cursor-pointer">
+              <span className="text-white text-[2rem] font-bold select-none">Procurar</span>
+            </Card>
+          </form>
+        </Form>
       </div>
 
       {/* List */}
@@ -105,13 +103,13 @@ function RealEstate() {
       </div>
 
       {/* Add Button */}
-      <div
-        className="h-[7rem] w-[25rem] flex justify-center items-center gap-[1.5rem] rounded-[0.8rem] bg-primary shadow-xl cursor-pointer absolute bottom-[6.5rem] right-[2.5rem]"
+      <Card
+        className="h-[6rem] w-[25rem] flex justify-center items-center gap-[1.5rem] rounded-[0.8rem] bg-primary shadow-xl cursor-pointer absolute bottom-[6.5rem] right-[2.5rem]"
         onClick={() => router.push("/real_estate/add")}
       >
         <IoAdd color="white" size={30} />
         <span className="text-white text-[2rem] font-bold select-none">Adicionar</span>
-      </div>
+      </Card>
 
       {/* Pagination */}
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={26} />

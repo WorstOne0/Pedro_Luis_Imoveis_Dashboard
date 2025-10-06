@@ -10,6 +10,7 @@ import RealEstateCard from "./real_estate_card";
 import DistrictPolygons from "./district_polygons";
 import InputWithLabel from "./input_with_label";
 import Pagination from "./pagination";
+import Dropzone from "./dropzone";
 // SVGS
 import ApartamentSVG from "./svgs/apartament";
 import HouseSVG from "./svgs/house";
@@ -37,6 +38,7 @@ export {
   DistrictPolygons,
   InputWithLabel,
   Pagination,
+  Dropzone,
   // SVGS
   ApartamentSVG,
   HouseSVG,

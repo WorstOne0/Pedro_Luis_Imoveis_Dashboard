@@ -52,7 +52,7 @@ export default function InputWithLabel({
               <Input
                 id={name}
                 className={cn(
-                  "md:text-[1.8rem] block px-[1.5rem] py-[1rem] border-[0.1rem] border-blue-600 rounded-[0.8rem] block w-full text-sm text-gray-900 bg-transparent border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer",
+                  "md:text-[1.8rem] px-[1.5rem] py-[1rem] border-[0.1rem] rounded-[0.8rem] block w-full text-sm text-gray-900 bg-transparent border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer",
                   className
                 )}
                 type={type}

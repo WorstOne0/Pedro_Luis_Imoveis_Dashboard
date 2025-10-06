@@ -1,18 +1,19 @@
 "use client";
 
-//
+// Next
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 // Services
 import { withAuth, withHydration } from "@/services";
-import { Card, Form, InputWithLabel } from "@/components";
+import { Card, Form, InputWithLabel, Dropzone } from "@/components";
 //
 import { MdOutlineDescription, MdOutlineApartment, MdExposurePlus1, MdExposureNeg1 } from "react-icons/md";
 import { FaBed, FaBath } from "react-icons/fa";
 import { FaLocationDot, FaDollarSign } from "react-icons/fa6";
 import { PiGarage } from "react-icons/pi";
 import { GiExpand } from "react-icons/gi";
+import { useRef, useState } from "react";
 
 const FormSchema = z.object({
   description: z.string(),
@@ -33,8 +34,11 @@ const FormSchema = z.object({
   number: z.string(),
 });
 
-export default withHydration(withAuth(Add, "all"));
-function Add() {
+// export default withAuth(Add, "all");
+export default function Add() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [images, setImages] = useState([]);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -123,7 +127,7 @@ function Add() {
             </div>
           </div>
 
-          {/* Street */}
+          {/* Address */}
           <div className="w-full flex flex-col mt-[2rem]">
             {/* Title */}
             <div className="w-full flex justify-between px-[1rem]">
@@ -151,8 +155,10 @@ function Add() {
               <span></span>
             </div>
 
-            {/* Images */}
-            <div className="h-[25rem] w-full bg-red-200 mt-[1rem]"></div>
+            {/* Dropzone */}
+            <div className="h-[40rem] w-full mt-[1rem]">
+              <Dropzone uploadedFiles={images} setUploadedFiles={setImages} />
+            </div>
           </div>
 
           {/* Map */}
@@ -163,7 +169,7 @@ function Add() {
               <span></span>
             </div>
 
-            {/* Images */}
+            {/* Google Map */}
             <div className="h-[25rem] w-full bg-red-200 mt-[1rem]"></div>
           </div>
         </form>
@@ -171,6 +177,7 @@ function Add() {
 
       {/* Sidebar */}
       <div className="h-[calc(100%-1.5rem)] min-w-[45rem] w-[45rem] flex flex-col justify-between bg-gray-200 p-[1.5rem] mt-[1.5rem]">
+        {/* Preview */}
         <div className="h-[25rem] w-full bg-red-200"></div>
 
         <div className="h-[6rem] w-full bg-primary rounded-[0.8rem] flex justify-center items-center">
