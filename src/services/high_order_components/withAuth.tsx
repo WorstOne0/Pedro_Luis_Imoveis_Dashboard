@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 // Next
@@ -14,23 +16,7 @@ export interface WithAuthProps {
 const HOME_ROUTE = "/dashboard";
 const LOGIN_ROUTE = "/login";
 
-const ROUTE_ROLES = [
-  /**
-   * For authentication pages
-   * @example /login /register
-   */
-  "auth",
-  /**
-   * Optional authentication
-   * It doesn't push to login page if user is not authenticated
-   */
-  "optional",
-  /**
-   * For all authenticated user
-   * will push to login if user is not authenticated
-   */
-  "all",
-] as const;
+const ROUTE_ROLES = ["public", "protected"] as const;
 type RouteRole = (typeof ROUTE_ROLES)[number];
 
 /**
@@ -43,12 +29,10 @@ type RouteRole = (typeof ROUTE_ROLES)[number];
 export default function withAuth<T extends WithAuthProps = WithAuthProps>(Component: React.ComponentType<T>, routeRole: RouteRole) {
   const ComponentWithAuth = React.forwardRef<any, Omit<T, keyof WithAuthProps>>((props, ref) => {
     const router = useRouter();
-
     const { user, isAuthenticated, isLoading, getSession } = useAuthStore((state) => state);
 
     const checkAuth = useCallback(async () => {
-      if (routeRole !== "all") return;
-
+      if (routeRole === "public") return;
       await getSession();
     }, [getSession]);
 
@@ -68,19 +52,20 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(Compon
 
       // Prevent authenticated user from accessing auth or other role pages
       if (isAuthenticated) {
-        if (routeRole === "auth") router.replace(HOME_ROUTE);
+        if (routeRole === "public") router.replace(HOME_ROUTE);
       }
 
       // Prevent unauthenticated user from accessing protected pages
       if (!isAuthenticated) {
-        if (routeRole === "all") router.replace(`${LOGIN_ROUTE}`);
+        if (routeRole === "protected") router.replace(`${LOGIN_ROUTE}`);
       }
     }, [user, isAuthenticated, isLoading, router]);
 
-    if (routeRole === "all" && isLoading) return <div>Loading</div>;
+    if (routeRole === "protected" && isLoading) return <div className="h-screen w-screen flex justify-center items-center">Loading</div>;
 
     return <Component {...(props as unknown as T)} ref={ref} user={user} />;
   });
 
+  ComponentWithAuth.displayName = `withAuth(${Component.displayName || Component.name || "Component"})`;
   return ComponentWithAuth;
 }

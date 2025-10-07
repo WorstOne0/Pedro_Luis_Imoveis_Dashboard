@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import React, { useCallback } from "react";
 import Image from "next/image";
 import { DropEvent, FileRejection, useDropzone } from "react-dropzone";
 import { filesize } from "filesize";
@@ -6,7 +8,7 @@ import { filesize } from "filesize";
 import imgAccept from "@/../public/test/kawaii-kawaiianime-anime-girl-animegirl-animekawaii-menhera-chan-ok-1156328445749rjgc7qz0-removebg-preview.png";
 import imgReject from "@/../public/test/unnamed-removebg-preview.png";
 
-import { AiOutlineCloudUpload, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 type DropzoneProps = {
   uploadedFiles: any[];
@@ -25,19 +27,21 @@ export default function Dropzone({
 }: DropzoneProps) {
   const id = React.useId();
 
-  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[], event: DropEvent) => {
-    console.log("acceptedFiles", acceptedFiles, event);
-    if (acceptedFiles.length == 0) return;
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length == 0) return;
 
-    setUploadedFiles([
-      ...uploadedFiles,
-      ...acceptedFiles.map((file) => ({
-        file,
-        size: filesize(file.size),
-        preview: URL.createObjectURL(file),
-      })),
-    ]);
-  }, []);
+      setUploadedFiles([
+        ...uploadedFiles,
+        ...acceptedFiles.map((file) => ({
+          file,
+          size: filesize(file.size),
+          preview: URL.createObjectURL(file),
+        })),
+      ]);
+    },
+    [setUploadedFiles, uploadedFiles]
+  );
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     onDrop,
@@ -46,7 +50,7 @@ export default function Dropzone({
   });
 
   if (uploadedFiles.length > 0 && !multiple) {
-    return <Image src={""} alt="" />;
+    return <img className="h-full w-full" src={uploadedFiles[0].preview} />;
   }
 
   return (

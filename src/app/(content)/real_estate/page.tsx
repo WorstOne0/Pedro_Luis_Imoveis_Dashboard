@@ -20,7 +20,7 @@ const FormSchema = z.object({
   search: z.string().email("Invalid email address"),
 });
 
-export default withHydration(withAuth(RealEstate, "all"));
+export default withHydration(withAuth(RealEstate, "protected"));
 function RealEstate() {
   const router = useRouter();
 

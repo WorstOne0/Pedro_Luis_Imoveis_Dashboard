@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 // Services
-import { withAuth, withHydration } from "@/services";
+import { withAuth } from "@/services";
 // Components
 import { Checkbox, Form, InputWithLabel } from "@/components";
 // Icons
@@ -21,7 +21,7 @@ const FormSchema = z.object({
   }),
 });
 
-export default withHydration(withAuth(Login, "auth"));
+export default withAuth(Login, "public");
 function Login() {
   //
   const router = useRouter();
@@ -37,10 +37,7 @@ function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const success = await login(data.email, data.password);
-
-    if (!success) {
-      return;
-    }
+    if (!success) return;
 
     router.push("/dashboard");
   };

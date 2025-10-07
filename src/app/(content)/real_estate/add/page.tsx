@@ -1,11 +1,12 @@
 "use client";
 
 // Next
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 // Services
-import { withAuth, withHydration } from "@/services";
+import { withAuth } from "@/services";
 import { Card, Form, InputWithLabel, Dropzone } from "@/components";
 //
 import { MdOutlineDescription, MdOutlineApartment, MdExposurePlus1, MdExposureNeg1 } from "react-icons/md";
@@ -13,7 +14,6 @@ import { FaBed, FaBath } from "react-icons/fa";
 import { FaLocationDot, FaDollarSign } from "react-icons/fa6";
 import { PiGarage } from "react-icons/pi";
 import { GiExpand } from "react-icons/gi";
-import { useRef, useState } from "react";
 
 const FormSchema = z.object({
   description: z.string(),
@@ -34,10 +34,8 @@ const FormSchema = z.object({
   number: z.string(),
 });
 
-// export default withAuth(Add, "all");
+// export default withAuth(Add, "protected");
 export default function Add() {
-  const ref = useRef<HTMLDivElement>(null);
-
   const [images, setImages] = useState([]);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

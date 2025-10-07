@@ -3,7 +3,7 @@
 // Services
 import { withAuth, withHydration } from "@/services";
 
-export default withHydration(withAuth(Settings, "all"));
+export default withHydration(withAuth(Settings, "protected"));
 function Settings() {
   return <div className="h-full w-full">Settings</div>;
 }

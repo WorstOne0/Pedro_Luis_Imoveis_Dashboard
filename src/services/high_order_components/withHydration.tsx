@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
 // Next
 import { useState, useEffect } from "react";
 

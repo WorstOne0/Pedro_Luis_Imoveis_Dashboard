@@ -60,7 +60,6 @@ const useAuthStore = create<AuthStoreType>((set) => ({
   },
   logout: () => {
     Cookies.remove("accessToken");
-
     set({ user: null });
   },
 }));
