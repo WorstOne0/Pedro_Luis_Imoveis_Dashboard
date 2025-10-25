@@ -1,13 +1,13 @@
 "use client";
 
 // Next
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SetStateAction, useState } from "react";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { MarkerF } from "@react-google-maps/api";
 // Services
-import { withAuth } from "@/services";
-import { Card, Form, InputWithLabel, Dropzone } from "@/components";
+import { Card, Form, InputWithLabel, Dropzone, GoogleMaps } from "@/components";
 //
 import { MdOutlineDescription, MdOutlineApartment, MdExposurePlus1, MdExposureNeg1 } from "react-icons/md";
 import { FaBed, FaBath } from "react-icons/fa";
@@ -34,8 +34,10 @@ const FormSchema = z.object({
   number: z.string(),
 });
 
-// export default withAuth(Add, "protected");
 export default function Add() {
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [marker, setMarker] = useState<google.maps.LatLng | null>(null);
+
   const [images, setImages] = useState([]);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -59,15 +61,37 @@ export default function Add() {
     },
   });
 
+  const onCreateMap = (map: google.maps.Map) => {
+    console.log("onCreateMap", map);
+
+    map.addListener("click", (event: { latLng: SetStateAction<google.maps.LatLng | null> }) => {
+      console.log("event", event);
+      setMarker(event.latLng);
+    });
+
+    setMap(map);
+  };
+
   return (
     <div className="h-full w-full flex">
       <Form {...form}>
         <form
-          className="h-[calc(100%-1.5rem)] min-w-0 grow flex flex-col overflow-y-auto scrollbar p-[1.5rem] mt-[1.5rem]"
+          className="h-[calc(100%-1.5rem)] min-w-0 grow flex flex-col overflow-y-auto scrollbar p-[1.5rem]"
           onSubmit={form.handleSubmit(() => {})}
         >
           {/* Thumbnail */}
-          <div className="min-h-[30rem] h-[30rem] w-full bg-blue-200"></div>
+          <div className="w-full flex flex-col">
+            {/* Title */}
+            <div className="w-full flex justify-between px-[1rem]">
+              <span className="text-[2.4rem] font-bold">Thumbnail</span>
+              <span></span>
+            </div>
+
+            {/* Dropzone */}
+            <div className="h-[40rem] w-full mt-[1rem]">
+              <Dropzone uploadedFiles={images} setUploadedFiles={setImages} />
+            </div>
+          </div>
 
           {/* Details */}
           <div className="w-full flex flex-col mt-[2rem]">
@@ -149,7 +173,7 @@ export default function Add() {
           <div className="w-full flex flex-col mt-[2rem]">
             {/* Title */}
             <div className="w-full flex justify-between px-[1rem]">
-              <span className="text-[2.4rem] font-bold">Imagens</span>
+              <span className="text-[2.4rem] font-bold">Images</span>
               <span></span>
             </div>
 
@@ -168,7 +192,9 @@ export default function Add() {
             </div>
 
             {/* Google Map */}
-            <div className="h-[25rem] w-full bg-red-200 mt-[1rem]"></div>
+            <div className="h-[65rem] w-full mt-[1rem]">
+              <GoogleMaps onCreateMap={onCreateMap}>{marker && <MarkerF position={marker} clickable={true} onClick={() => {}} />}</GoogleMaps>
+            </div>
           </div>
         </form>
       </Form>

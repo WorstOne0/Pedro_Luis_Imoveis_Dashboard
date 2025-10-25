@@ -8,7 +8,7 @@ import { filesize } from "filesize";
 import imgAccept from "@/../public/test/kawaii-kawaiianime-anime-girl-animegirl-animekawaii-menhera-chan-ok-1156328445749rjgc7qz0-removebg-preview.png";
 import imgReject from "@/../public/test/unnamed-removebg-preview.png";
 
-import { AiOutlineCloudUpload } from "react-icons/ai";
+import { AiOutlineCloudUpload, AiOutlineDelete } from "react-icons/ai";
 
 type DropzoneProps = {
   uploadedFiles: any[];
@@ -50,7 +50,16 @@ export default function Dropzone({
   });
 
   if (uploadedFiles.length > 0 && !multiple) {
-    return <img className="h-full w-full" src={uploadedFiles[0].preview} />;
+    return (
+      <div className="h-full w-full flex relative p-2 bg-gray-100">
+        <div className="h-full w-full bg-contain bg-no-repeat bg-center relative" style={{ backgroundImage: `url(${uploadedFiles[0].preview})` }} />
+
+        <div className="flex items-center bg-red-800 px-[1.5rem] py-[0.5rem] rounded-[0.8rem] gap-[0.8rem] absolute top-[1rem] right-[1rem] select-none cursor-pointer">
+          <AiOutlineDelete color="white" size={16} />
+          <span className="text-white text-[1.2rem]">Remover</span>
+        </div>
+      </div>
+    );
   }
 
   return (
