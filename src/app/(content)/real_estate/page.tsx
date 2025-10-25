@@ -97,7 +97,7 @@ function RealEstate() {
         </div>
       </div>
       <div className="min-h-0 grow w-full grid grid-cols-[repeat(auto-fill,minmax(50rem,1fr))] gap-[1.5rem] px-[1.5rem] overflow-y-auto">
-        {[...realEstateList, ...realEstateList, ...realEstateList, ...realEstateList].map((item, index) => (
+        {realEstateList.map((item, index) => (
           <RealEstateCard key={`real_estate_card_${index}`} realEstate={item} onClickCallback={() => router.push(`/real_estate/edit/${item._id}`)} />
         ))}
       </div>

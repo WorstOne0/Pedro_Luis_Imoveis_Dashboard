@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 // Store
@@ -22,10 +24,9 @@ export default function RealEstateCard({ realEstate, onClickCallback }: { realEs
   return (
     <Card className={`pb-3 flex flex-col select-none cursor-pointer rounded-[0.8rem] mt-4 relative`} onClick={handleCardClick}>
       {/* Imagem */}
-      <div
-        className={`h-[19rem] w-full rounded-[0.8rem] bg-cover bg-no-repeat bg-center relative`}
-        style={{ backgroundImage: `url(${realEstate.thumbnail})` }}
-      ></div>
+      <div className={`h-[22rem] w-full rounded-[0.8rem] relative`}>
+        <img className={`h-[100%] w-[100%] rounded-[0.8rem] object-cover object-center`} src={realEstate.thumbnail} alt="" />
+      </div>
       <div className="grow px-5 pt-3 pb-2 bg-white">
         {/* Title */}
         <div className="flex justify-between items-center">
