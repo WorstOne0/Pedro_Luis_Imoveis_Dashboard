@@ -54,7 +54,7 @@ export default function Dropzone({
       <div className="h-full w-full flex relative p-2 bg-gray-100">
         <div className="h-full w-full bg-contain bg-no-repeat bg-center relative" style={{ backgroundImage: `url(${uploadedFiles[0].preview})` }} />
 
-        <div className="flex items-center bg-red-800 px-[1.5rem] py-[0.5rem] rounded-[0.8rem] gap-[0.8rem] absolute top-[1rem] right-[1rem] select-none cursor-pointer">
+        <div className="flex items-center bg-red-800 px-[1.5rem] py-[0.5rem] rounded-[0.8rem] gap-[0.8rem] absolute top-[1rem] right-[1rem] select-none cursor-pointer" onClick={() => {}}>
           <AiOutlineDelete color="white" size={16} />
           <span className="text-white text-[1.2rem]">Remover</span>
         </div>
