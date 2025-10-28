@@ -11,6 +11,7 @@ import DistrictPolygons from "./district_polygons";
 import InputWithLabel from "./input_with_label";
 import Pagination from "./pagination";
 import Dropzone from "./dropzone";
+import SelectWithLabel from "./select_with_label";
 // SVGS
 import ApartamentSVG from "./svgs/apartament";
 import HouseSVG from "./svgs/house";
@@ -39,6 +40,7 @@ export {
   InputWithLabel,
   Pagination,
   Dropzone,
+  SelectWithLabel,
   // SVGS
   ApartamentSVG,
   HouseSVG,

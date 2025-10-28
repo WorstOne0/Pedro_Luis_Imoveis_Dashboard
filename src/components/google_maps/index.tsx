@@ -18,15 +18,16 @@ interface GoogleMapsProps {
   onCreateMap?: Function;
   height?: string;
   width?: string;
+  gestureHandling?: string;
 }
 
-export default function GoogleMaps({ children, onCreateMap, height = "100%", width = "100%" }: GoogleMapsProps) {
+export default function GoogleMaps({ children, onCreateMap, height = "100%", width = "100%", gestureHandling = "auto" }: GoogleMapsProps) {
   const [myMap, setMyMap] = useState<google.maps.Map | null>(null);
 
   const defaultMapZoom = 13;
   const defaultMapOptions = {
     tilt: 0,
-    gestureHandling: "auto",
+    gestureHandling: gestureHandling,
     mapTypeId: "hybrid",
     //
     disableDefaultUI: true,
