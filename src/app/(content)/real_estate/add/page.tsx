@@ -2,7 +2,7 @@
 "use client";
 
 // Next
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,31 +15,34 @@ import { FaBed, FaBath } from "react-icons/fa";
 import { FaLocationDot, FaDollarSign } from "react-icons/fa6";
 import { PiGarage } from "react-icons/pi";
 import { GiExpand } from "react-icons/gi";
+import { apiService } from "@/services";
 
 const FormSchema = z.object({
   description: z.string(),
   type: z.string(),
   //
-  price: z.number(),
-  area: z.number(),
-  rooms: z.number(),
-  bathrooms: z.number(),
-  garages: z.number(),
+  price: z.coerce.number(),
+  area: z.coerce.number(),
+  rooms: z.coerce.number(),
+  bathrooms: z.coerce.number(),
+  garages: z.coerce.number(),
   //
-  cep: z.string(),
-  street: z.string(),
-  district: z.string(),
-  city: z.string(),
-  state: z.string(),
-  complement: z.string(),
-  number: z.string(),
+  address: z.object({
+    cep: z.string(),
+    street: z.string(),
+    district: z.string(),
+    city: z.string(),
+    state: z.string(),
+    complement: z.string(),
+    number: z.string(),
+  }),
 });
 
 export default function Add() {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.LatLng | null>(null);
 
-  const [thumbnail, setThumbnail] = useState([]);
+  const [thumbnail, setThumbnail] = useState<any>([]);
   const [images, setImages] = useState([]);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,13 +56,15 @@ export default function Add() {
       bathrooms: 0,
       garages: 0,
       //
-      cep: "",
-      street: "",
-      district: "",
-      city: "",
-      state: "",
-      complement: "",
-      number: "",
+      address: {
+        cep: "",
+        street: "",
+        district: "",
+        city: "",
+        state: "",
+        complement: "",
+        number: "",
+      },
     },
   });
 
@@ -69,14 +74,25 @@ export default function Add() {
     setMap(map);
   };
 
+  const onSubmit = async (data: any) => {
+    const realEstate = { ...data, sale: "sell", address: { ...data.address, position: marker } };
+    const formData = new FormData();
+
+    formData.append("thumbnail", thumbnail[0].file);
+    images.map((image: any) => formData.append("images", image.file));
+
+    formData.append("metadata", JSON.stringify(realEstate));
+
+    const response = await apiService.post("/real_estate", formData, { headers: { "Content-Type": "multipart/form-data" } });
+    console.log("response", response.data);
+  };
+
   return (
     <div className="h-full w-full flex">
       <Form {...form}>
         <form
           className="h-[calc(100%-1.5rem)] min-w-0 grow flex flex-col overflow-y-auto scrollbar p-[1.5rem]"
-          onSubmit={form.handleSubmit(() => {
-            console.log("values", form.getValues());
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           {/* Thumbnail */}
           <div className="w-full flex flex-col">
@@ -192,13 +208,13 @@ export default function Add() {
 
             {/* Fields */}
             <div className="w-full grid grid-cols-2 gap-[1rem] mt-[1rem]">
-              <InputWithLabel name="cep" label="CEP" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="street" label="Rua" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="district" label="Bairro" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="city" label="Cidade" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="state" label="Estado" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="complement" label="Complemento" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
-              <InputWithLabel name="number" label="Numero" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.cep" label="CEP" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.street" label="Rua" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.district" label="Bairro" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.city" label="Cidade" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.state" label="Estado" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.complement" label="Complemento" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
+              <InputWithLabel name="address.number" label="Numero" className="h-[5rem] w-full" startIcon={<FaLocationDot />} />
             </div>
           </div>
 

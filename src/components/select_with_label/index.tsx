@@ -33,8 +33,8 @@ export default function SelectWithLabel({ value, name, label, placeholder = "", 
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Fruits</SelectLabel>
-                  <SelectItem value="apple" className="text-[1.4rem]">
-                    Apple
+                  <SelectItem value="apartment" className="text-[1.4rem]">
+                    Apartamento
                   </SelectItem>
                   <SelectItem value="banana" className="text-[1.4rem]">
                     Banana

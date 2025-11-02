@@ -13,7 +13,7 @@ import { useRealEstateStore } from "@/store";
 import { withAuth, withHydration } from "@/services";
 //
 import { BsListUl, BsGrid1X2Fill } from "react-icons/bs";
-import { FaSearch, FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
+import { FaSortAmountDown } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 
 const FormSchema = z.object({
@@ -24,8 +24,8 @@ export default withHydration(withAuth(RealEstate, "protected"));
 function RealEstate() {
   const router = useRouter();
 
-  const { realEstateList, setRealEstateList, setRealEstateSelected } = useRealEstateStore((state) => state);
-  const { isLoading } = useApiFetch({ url: "http://localhost:4000/real_estate", method: "post" }, setRealEstateList);
+  const { realEstateList, setRealEstateList } = useRealEstateStore((state) => state);
+  const { isLoading } = useApiFetch({ url: "http://localhost:4000/real_estate", method: "get" }, setRealEstateList);
 
   const [currentPage, setCurrentPage] = useState(1);
 
